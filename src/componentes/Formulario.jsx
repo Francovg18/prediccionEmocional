@@ -1,23 +1,56 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Formulario() {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Recopilar respuestas
+    const respuestas = Array.from({ length: 15 }, (_, i) =>
+      parseInt(event.target[`pregunta_${i + 1}`].value)
+    );
+
+    try {
+      // Enviar respuestas al backend
+      const response = await fetch("http://localhost:5000/predecir", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ respuestas }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.error || "Error al procesar la solicitud.");
+        return;
+      }
+
+      // Obtener datos del backend
+      const data = await response.json();
+
+      // Redirigir a la página de resultados con el estado emocional y recomendaciones
+      navigate("/resultado", { state: { resultado: data } });
+    } catch (error) {
+      console.error("Error al enviar las respuestas:", error);
+      alert("Hubo un problema al procesar tu solicitud. Intenta nuevamente.");
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-200 font-sans">
+    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-gray-900 text-gray-200 font-sans">
       <div className="max-w-xl w-full bg-gray-800 shadow-2xl rounded-3xl p-8">
         <h1 className="text-3xl font-bold text-center text-blue-400 mb-6 drop-shadow-lg">
           😊 Predicción de tu Estado Emocional
         </h1>
         <form
-          action="/predecir"
-          method="post"
+          onSubmit={handleSubmit}
           className="space-y-6 max-h-[600px] overflow-y-auto"
         >
-          {/* Sección 1: Estado emocional positivo */}
           <div className="bg-gray-700 p-4 rounded-xl shadow-md">
             <h2 className="text-xl font-semibold text-blue-300 mb-4">
               🌈 Estado emocional positivo
             </h2>
-            {/* Preguntas */}
             {[...Array(5)].map((_, index) => (
               <div key={index} className="mt-4">
                 <label
@@ -45,12 +78,10 @@ function Formulario() {
             ))}
           </div>
 
-          {/* Sección 2: Estado emocional negativo */}
           <div className="bg-gray-700 p-4 rounded-xl shadow-md">
             <h2 className="text-xl font-semibold text-red-300 mb-4">
               😟 Estado emocional negativo
             </h2>
-            {/* Preguntas */}
             {[...Array(5)].map((_, index) => (
               <div key={index + 5} className="mt-4">
                 <label
@@ -78,12 +109,10 @@ function Formulario() {
             ))}
           </div>
 
-          {/* Sección 3: Ansiedad y preocupación */}
           <div className="bg-gray-700 p-4 rounded-xl shadow-md">
             <h2 className="text-xl font-semibold text-yellow-300 mb-4">
               😰 Ansiedad y preocupación
             </h2>
-            {/* Preguntas */}
             {[...Array(5)].map((_, index) => (
               <div key={index + 10} className="mt-4">
                 <label
@@ -111,7 +140,6 @@ function Formulario() {
             ))}
           </div>
 
-          {/* Botón Enviar */}
           <div>
             <button
               type="submit"

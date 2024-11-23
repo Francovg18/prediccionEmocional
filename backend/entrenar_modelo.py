@@ -11,7 +11,7 @@ import seaborn as sns
 archivo = 'emocional.xlsx'  
 df = pd.read_excel(archivo)
 
-# Clasificación en base a cinco categorías
+# Clasificación en categorías
 def clasificar(puntaje):
     if puntaje < 2:
         return 'Muy Negativo😒'

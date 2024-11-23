@@ -9,17 +9,17 @@ function Nav() {
         </div>
         <ul className="flex space-x-6 text-lg font-medium">
           <li>
-            <a href="/" className="hover:text-purple-400 transition">
+            <a href="/" className="hover:text-gray-400 transition">
               Inicio
             </a>
           </li>
           <li>
-            <a href="/sobre-nosotros" className="hover:text-purple-400 transition">
+            <a href="/sobre-nosotros" className="hover:text-gray-400 transition">
               Sobre Nosotros
             </a>
           </li>
           <li>
-            <a href="/contacto" className="hover:text-purple-400 transition">
+            <a href="/contacto" className="hover:text-gray-400 transition">
               Contacto
             </a>
           </li>
